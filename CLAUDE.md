@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a webMethods.io Integration connector that provides access to Large Language Models (LLMs) through the Vercel AI SDK. The connector abstracts away provider-specific implementations and allows workflows to interact with multiple LLM providers (OpenAI, Anthropic, Google, Mistral, Cohere, Groq, Perplexity, DeepSeek, XAI) through a unified interface.
+This is a webMethods.io Integration connector that provides access to Large Language Models (LLMs) through native provider SDKs. The connector abstracts away provider-specific implementations and allows workflows to interact with multiple LLM providers (OpenAI, Anthropic, Groq, Mistral, Perplexity, DeepSeek, Together) through a unified interface.
 
 ## Architecture
 
@@ -17,13 +17,13 @@ The connector follows the webMethods.io connector pattern:
 - **`action/`**: Directory containing action implementations
   - `generateText.js`: Synchronous text generation using Vercel AI SDK's `generateText()`
   - `streamText.js`: Streaming text generation using Vercel AI SDK's `streamText()`
-- **`package.json`**: Node.js dependencies including `ai` (Vercel AI SDK)
+- **`package.json`**: Node.js dependencies including `openai` and `@anthropic-ai/sdk`
 
 ### Key Design Patterns
 
-1. **Provider Abstraction**: Uses Vercel AI SDK's `provider/model` format (e.g., `openai/gpt-4`, `anthropic/claude-sonnet-4.5`)
-2. **Environment Variable Authentication**: API keys are set as environment variables (e.g., `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) which the Vercel AI SDK reads automatically
-3. **Unified Interface**: Both actions share the same input structure and use the `ai` package's unified API
+1. **Provider Abstraction**: Uses direct provider SDKs with model identifiers (e.g., `gpt-4o`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`)
+2. **Direct SDK Authentication**: API keys are passed directly to the provider SDKs (OpenAI SDK and Anthropic SDK)
+3. **Unified Interface**: Both actions share the same input structure using native provider SDKs
 
 ## Testing and Deployment
 
@@ -40,7 +40,7 @@ Before testing or deploying, ensure you have:
 
 1. **Navigate to the connector directory**:
    ```bash
-   cd /Users/staillan/git/vercelai
+   cd llm-proxy-connector
    ```
 
 2. **Ensure you're using the correct Node.js version**:
@@ -106,7 +106,7 @@ Before testing or deploying, ensure you have:
 
 2. **Navigate to Connectors** section
 
-3. **Find your "Vercel AI SDK" connector** in the list
+3. **Find your "LLM Proxy" connector** in the list
 
 4. **Create a new account/connection**:
    - Select the LLM provider (e.g., "openai", "anthropic")
@@ -116,12 +116,12 @@ Before testing or deploying, ensure you have:
 
 5. **Use in a workflow**:
    - Create or edit a workflow
-   - Add the "Vercel AI SDK" connector
+   - Add the "LLM Proxy" connector
    - Choose an action:
      - **Generate Text**: For synchronous text generation
      - **Stream Text**: For streaming text generation
    - Configure the action:
-     - **Model**: Use format `provider/model` (e.g., `openai/gpt-4`, `anthropic/claude-sonnet-4.5`)
+     - **Model**: Model identifier (e.g., `gpt-4o`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`)
      - **Prompt**: Your text prompt
      - **System Prompt** (optional): System instructions
      - **Max Tokens** (optional): Token limit
@@ -147,15 +147,14 @@ wmio download
 wmio logout
 ```
 
-### Working with Vercel AI SDK
+### Working with Provider SDKs
 
-The connector uses the Vercel AI SDK (`ai` npm package) which provides:
+The connector uses native provider SDKs:
 
-- **Model Format**: `provider/model-name` (e.g., `anthropic/claude-sonnet-4.5`)
-- **API Key Management**: Set via environment variables per provider
-- **Core Functions**:
-  - `generateText()`: Synchronous text generation
-  - `streamText()`: Streaming text generation with async iteration
+- **OpenAI SDK**: For OpenAI and OpenAI-compatible providers (Groq, DeepSeek, Mistral, Perplexity, Together)
+- **Anthropic SDK**: For Claude models
+- **Model Format**: Direct model identifiers (e.g., `gpt-4o`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`, `llama-3.3-70b`)
+- **API Key Management**: Passed directly to SDK clients during initialization
 
 ## Action Development
 
@@ -191,19 +190,20 @@ Provider API keys map to these environment variables:
 When adding new LLM capabilities:
 
 1. Create action file in `action/` directory
-2. Import required functions from `ai` package
-3. Use the `setProviderEnvVar()` helper to set API keys
-4. Call Vercel AI SDK functions with `model: input.model` format
+2. Import required SDKs (`openai` and/or `@anthropic-ai/sdk`)
+3. Initialize the appropriate SDK client with the API key from `input.auth`
+4. Call the SDK methods with the model identifier from `input.model`
 5. Return structured output via `output(null, result)`
 
 ## Dependencies
 
-- **`ai`**: Vercel AI SDK (v3.4.33+) - provides unified LLM interface
+- **`openai`**: OpenAI SDK (v4.70.0+) - for OpenAI and OpenAI-compatible providers
+- **`@anthropic-ai/sdk`**: Anthropic SDK (v0.32.0+) - for Claude models
 - **`@webmethodsio/cli-sdk`**: webMethods.io connector SDK
-- **`request`**: HTTP client (legacy dependency from template)
 
 ## Resources
 
-- Vercel AI SDK Documentation: https://sdk.vercel.ai
+- OpenAI SDK Documentation: https://github.com/openai/openai-node
+- Anthropic SDK Documentation: https://docs.anthropic.com/en/api/client-sdks
 - webMethods.io Connector Builder: https://docs.webmethods.io/saas/webmethods-integration/connectors/connector_builder/
 - Node.js Version: 22.15.1 required

@@ -83,7 +83,7 @@ module.exports = {
 
         // Test with a minimal completion
         const completion = await openai.chat.completions.create({
-          model: 'gpt-3.5-turbo', // Default, will be overridden by user
+          model: 'gpt-4o-mini', // Default, will be overridden by user
           messages: [{ role: 'user', content: 'Hello' }],
           max_tokens: 5
         });

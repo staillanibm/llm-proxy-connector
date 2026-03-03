@@ -17,7 +17,7 @@ module.exports = {
       model: {
         type: 'string',
         title: 'Model',
-        description: 'The model to use in format provider/model (e.g., openai/gpt-4, anthropic/claude-sonnet-4.5, google/gemini-2.5-flash)',
+        description: 'Model identifier (e.g., gpt-4o, claude-sonnet-4-6, claude-haiku-4-5-20251001, llama-3.3-70b)',
         minLength: 1,
         displayLabel: 'Model'
       },

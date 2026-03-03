@@ -71,7 +71,7 @@ Generate text completions using any supported LLM model.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| model | string | Yes | Model identifier (e.g., `gpt-4`, `claude-3-5-sonnet-20241022`, `llama-3.3-70b`) |
+| model | string | Yes | Model identifier (e.g., `gpt-4o`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`, `llama-3.3-70b`) |
 | prompt | string | Yes | The text prompt to send to the model |
 | system_prompt | string | No | System instructions for the model |
 | max_tokens | number | No | Maximum tokens to generate (default: 1024 for Anthropic) |
