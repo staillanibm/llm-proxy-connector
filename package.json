@@ -1,0 +1,10 @@
+{
+  "name": "LLM Proxy",
+  "version": "1.0.0",
+  "description": "LLM Proxy - Access multiple LLM providers via OpenAI-compatible APIs and Anthropic",
+  "dependencies": {
+    "@webmethodsio/cli-sdk": "*",
+    "openai": "^4.70.0",
+    "@anthropic-ai/sdk": "^0.32.0"
+  }
+}

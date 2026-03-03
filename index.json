@@ -1,0 +1,14 @@
+{
+  "name": "LLM Proxy",
+  "description": "LLM Proxy - Access OpenAI, Anthropic, Groq, Mistral, DeepSeek and other providers",
+  "triggers": [],
+  "actions": [
+    "/v1/generateText"
+  ],
+  "version": 1,
+  "auth_type": "custom",
+  "doc_link": "",
+  "appId": "8aa35a81-cad6-411d-9dcd-0aa91cf04645",
+  "guid": "f570bcff-b7d6-4c34-86cd-a8a3e36ab0ff",
+  "connectionUid": "llm-proxy-0C9QE0XQN"
+}
